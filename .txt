@@ -1,0 +1,1 @@
+if "%option%"=="1" call modules\optimizer.bat
