@@ -5,7 +5,6 @@ mode con: cols=60 lines=30
 
 :boot
 cls
-
 echo.
 echo.
 echo.
@@ -74,7 +73,6 @@ timeout /t 1 >nul
 
 goto menu
 
-
 :menu
 cls
 echo ============================================================
@@ -93,18 +91,16 @@ echo.
 echo  [0]  Exit
 echo.
 echo ============================================================
-set /p option=Select Module ^>
-
-if "%option%"=="1" call "%~dp0modules\optimizer.bat"
-if "%option%"=="2" call "%~dp0modules\cleaner.bat"
-if "%option%"=="3" call "%~dp0modules\info.bat"
-if "%option%"=="4" call "%~dp0modules\recovery.bat"
-if "%option%"=="5" call "%~dp0modules\gamemode.bat"
-if "%option%"=="6" call "%~dp0modules\config.bat"
-if "%option%"=="7" call "%~dp0modules\logs.bat"
-if "%option%"=="0" goto exit
+choice /c 12345670 /n /m "Select Module > "
+if errorlevel 8 goto exit
+if errorlevel 7 call "%~dp0modules\logs.bat"
+if errorlevel 6 call "%~dp0modules\config.bat"
+if errorlevel 5 call "%~dp0modules\gamemode.bat"
+if errorlevel 4 call "%~dp0modules\recovery.bat"
+if errorlevel 3 call "%~dp0modules\info.bat"
+if errorlevel 2 call "%~dp0modules\cleaner.bat"
+if errorlevel 1 call "%~dp0modules\optimizer.bat"
 goto menu
-
 
 :exit
 cls

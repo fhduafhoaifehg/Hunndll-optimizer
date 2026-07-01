@@ -1,18 +1,36 @@
 @echo off
-title HUNNDLL$ - Session Logs
+title HVNNDLL$ - Session Logs
 color 0F
 cls
 
 echo ============================================================
-echo                  HUNNDLL$ - LOG-07
+echo                  HVNNDLL$ - LOG-07
 echo                    Session Logs
 echo ============================================================
 echo.
-echo No logs were found.
+set "LOG_FILE=%~dp0..\hvnn_session.log"
+
+if not exist "%LOG_FILE%" (
+    echo No logs found.
+    echo.
+    echo Session logging will be available when
+    echo the main framework records operations.
+    echo.
+    echo ============================================================
+    pause
+    exit /b
+)
+
+echo Recent session log entries:
 echo.
-echo Log support will be available
-echo in a future build.
+type "%LOG_FILE%"
 echo.
 echo ============================================================
+echo To clear logs, press Y.
+choice /c YN /m "Clear logs?"
+if errorlevel 2 exit /b
+del /f /q "%LOG_FILE%" >nul 2>&1
+echo [ OK ] Logs cleared.
+echo.
 pause
 exit

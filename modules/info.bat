@@ -1,36 +1,49 @@
 @echo off
-title HUNNDLL$ - System Information
+title HVNNDLL$ - System Information
 color 0F
 cls
 
 echo ============================================================
-echo                    HUNNDLL$ - INF-03
-echo                  System Information
+echo                  HVNNDLL$ - INF-03
+echo                System Information
 echo ============================================================
 echo.
 
-echo [CPU]
-wmic cpu get Name /value
+echo ---------- CPU ----------
+for /f "skip=1 tokens=*" %%a in ('wmic cpu get Name') do echo %%a & goto cpu_done
+:cpu_done
 echo.
 
-echo [MEMORY]
-wmic computersystem get TotalPhysicalMemory /value
+echo ---------- RAM ----------
+for /f "skip=1 tokens=*" %%a in ('wmic memorychip get Capacity') do if not "%%a"=="" (
+    set /a cap=%%a/1073741824 2>nul
+    if defined cap echo %%cap%% GB
+)
+wmic computersystem get TotalPhysicalMemory /value | find "="
 echo.
 
-echo [GRAPHICS]
-wmic path win32_VideoController get Name
+echo ---------- GPU ----------
+wmic path win32_VideoController get Name | findstr /v /b "Name"
 echo.
 
-echo [STORAGE]
-wmic diskdrive get Model,Size
+echo ---------- DISKS ----------
+wmic logicaldisk get DeviceID,Size,Freespace | findstr /v "Freespace"
 echo.
 
-echo [OPERATING SYSTEM]
-wmic os get Caption,Version
+echo ---------- OS ----------
+wmic os get Caption,Version,OSArchitecture | findstr /v "Caption"
 echo.
 
-echo [COMPUTER]
-wmic computersystem get Manufacturer,Model
+echo ---------- MOTHERBOARD ----------
+wmic baseboard get Manufacturer,Product | findstr /v "Manufacturer"
+echo.
+
+echo ---------- BIOS ----------
+wmic bios get Manufacturer,SMBIOSBIOSVersion,ReleaseDate | findstr /v "Manufacturer"
+echo.
+
+echo ---------- NETWORK ----------
+wmic nic where "NetEnabled=True" get Name,Speed | findstr /v "Name"
 echo.
 
 echo ============================================================
